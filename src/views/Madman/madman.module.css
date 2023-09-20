@@ -1,0 +1,205 @@
+.content {
+  color: white;
+  height: 100%;
+  background-image: url('../../assets/image/yanjiang.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+
+.heard {
+  /* position: fixed;
+  width: 100%; */
+  height: 20%;
+  border: 1px solid;
+  padding: 20px 10px 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.time {
+  text-align: center;
+  font-size: 40px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  letter-spacing: 0.5em;
+  color: red;
+}
+
+.notice {
+  margin: 0 10%;
+  border: solid;
+  padding: 15px;
+}
+
+.notice li {
+  /* height: 30px; */
+  /* line-height: 30px; */
+  font-size: 16px;
+}
+
+.contaior {
+  display: flex;
+  flex: 1;
+}
+
+
+.middle {
+  flex: 1;
+  border: solid;
+}
+
+.main {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#chat {
+  position: relative;
+  /* background-color: rgb(248, 248, 248); */
+}
+
+#chat .people {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+#chat .userContent {
+  height: 450px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+/* #chat .userContent::-webkit-scrollbar {
+  display: none;
+} */
+
+.main h3 {
+  text-align: center;
+  letter-spacing: 1.1em;
+}
+
+#chat .foot {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+#chat .user {
+  font-size: 14px;
+  padding: 0 10px;
+}
+
+#chat .user span {
+  opacity: 0.7;
+}
+
+#chat .user .chatContent {
+  width: fit-content;
+  margin: 5px 0 15px 0;
+  font-size: 16px;
+  /* color: black; */
+  background-color: rgb(50, 30, 30);
+  border-radius: 8px;
+  padding: 5px;
+  /* border: 1px solid rgb(219, 219, 219); */
+}
+
+#crazyPool {
+  display: flex;
+  flex-direction: column;
+}
+
+#crazyPool .userinfoContent {
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.userinfoAll {
+  font-size: 14px;
+  display: flex;
+  margin-bottom: 5px;
+  align-items: center;
+}
+
+.userinfoAll .name {
+  margin-left: 10px;
+  width: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.life {
+  margin-left: auto;
+}
+
+.userinfoAll .position {
+  margin-left: auto;
+}
+
+.diedPerson {
+  width: 180px;
+  height: 150px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.left,
+.right {
+  width: 20%;
+  border: solid;
+}
+
+h2 {
+  text-align: center;
+}
+
+.exit {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.userInfo {
+  position: fixed;
+  right: 0;
+  top: 100px;
+  padding: 10px;
+  background-color: rgba(143, 141, 164, 0.5);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.userInfo:hover {
+  .name {
+    display: block;
+  }
+}
+
+.userInfo .avatar,
+.diedBook,
+.setting {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.userInfo .name {
+  font-size: 14px;
+  margin-left: 10px;
+  width: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+}
