@@ -59,10 +59,14 @@ const selectCount = (table, condition) => {
  * @param {Array} onceValue 指定查询数据 
  * @param {string} join 连接方式 
  * @param {string} condition 条件 
+ * @param {string} whereCondition where的条件语句
  */
-const selectJoin = (table, onceValue, join, condition) => {
+const selectJoin = (table, onceValue, join, condition, whereCondition) => {
   onceValue = onceValue.length === 0 ? '*' : onceValue.toString()
-  return `SELECT ${onceValue} from ${table[0]} a ${join} join ${table[1]} b on ${condition}`
+  whereCondition = whereCondition && 'where ' + whereCondition + ' =?'
+  const result = !whereCondition ? `SELECT ${onceValue} from ${table[0]} a ${join} join ${table[1]} b on ${condition}` :
+    `SELECT ${onceValue} from ${table[0]} a ${join} join ${table[1]} b on ${condition} ${whereCondition}`
+  return result
 }
 
 /**

@@ -10,12 +10,21 @@ import { UserOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { Form } from 'antd';
 import { RegulaRexpression } from 'jscommpont'
-import { loginApi, userInfoApi, userNameApi } from '../../api';
+import { loginApi, postsChangeApi, postsInfoApi, uploadApi, userInfoApi, userNameApi } from '../../api';
 import { User } from '../../utils/tools';
 import { message } from 'antd';
 import { Popover } from 'antd';
 import { useRef } from 'react';
+import { Select } from 'antd';
+import { Upload } from 'antd';
 
+
+// 头像上传信息
+const props = {
+  name: 'avatar',
+  action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
+  listType: "picture-circle",
+}
 
 const Madman = () => {
 
@@ -31,6 +40,9 @@ const Madman = () => {
   const socket = useRef()
   const [person, Setperson] = useState(0)
   const chatContainerRef = useRef(null)
+  const [postsData, SetpostsData] = useState([])
+  const file = useRef()
+  const forms = useRef()
 
   // 时间
   const Time = () => {
@@ -74,7 +86,7 @@ const Madman = () => {
 
   // 人员榜样式
   const user = () => {
-    const userDom = people.slice(0, 5).map((item) =>
+    const userDom = people?.slice(0, 5).map((item) =>
       <div key={item.userid} className={Stylecss.userinfoAll}>
         <Avatar icon={<UserOutlined />}></Avatar>
         <div className={Stylecss.name}>{item.username}</div>
@@ -86,7 +98,7 @@ const Madman = () => {
 
   // 生死簿人员
   const diedUser = () => {
-    const userDom = people.map((item) =>
+    const userDom = people?.map((item) =>
       <div key={item.userid} className={Stylecss.userinfoAll}>
         <Avatar icon={<UserOutlined />}></Avatar>
         <div className={Stylecss.name}>{item.username}</div>
@@ -101,7 +113,14 @@ const Madman = () => {
     if (!userInfo.length) {
       SetisModalOpen(true)
     } else {
+      file.current.dispatchEvent(new MouseEvent('click'))
     }
+  }
+
+  // 获取图片信息
+  const fileUpata = async (event) => {
+    let formData = new FormData(forms.current)
+    await uploadApi(formData)
   }
 
   // 修改用户名称
@@ -122,15 +141,23 @@ const Madman = () => {
       const { data } = res
       userinfo = data
     } else {
-      param = {
-        ...param,
+      const paramUser = {
+        username: param.username,
         userid: userInfo[0].userid
       }
-      await userNameApi(param)
+      const paramPosts = {
+        posts: typeof param.posts === 'number' ? { label: userInfo[0].posts, value: userInfo[0].id } : param.posts,
+        userid: userInfo[0].userid
+      }
+      await userNameApi(paramUser)
+      await postsChangeApi(paramPosts)
       userinfo = [{
         ...User.getLocal()[0],
-        username: param.username
+        username: param.username,
+        posts: typeof param.posts === 'number' ? undefined : param.posts.label,
+        id: typeof param.posts === 'number' ? param.posts : param.posts.value
       }]
+      form.setFieldValue('posts', userinfo[0].id)
     }
     User.setLocal(userinfo)
     SetuserInfo(userinfo)
@@ -144,6 +171,13 @@ const Madman = () => {
     const { data: res } = await userInfoApi()
     const { data } = res
     Setpeople(data)
+  }
+
+  // 获取职位列表
+  const postsApi = async () => {
+    const { data: res } = await postsInfoApi()
+    const { data } = res
+    SetpostsData(data)
   }
 
   // 退出登录
@@ -215,6 +249,7 @@ const Madman = () => {
   useEffect(() => {
     Time()
     userInfoAll()
+    postsApi()
   }, [])
 
   return (
@@ -248,7 +283,7 @@ const Madman = () => {
                     width: '100%',
                   }}
                 >
-                  <Input placeholder='输入' value={message} onChange={change} />
+                  <Input placeholder='输入' value={message} onChange={change} onKeyDown={(evet)=>{evet.keyCode === 13 && submit()}} />
                   <Button onClick={submit} type="primary" danger>发送</Button>
                 </Space.Compact>
               </div>
@@ -271,7 +306,12 @@ const Madman = () => {
       <div className={Stylecss.userInfo}>
         <div className={Stylecss.avatar}>
           <Avatar onClick={userHandle}
-            icon={userInfo.length && <UserOutlined />} >{!userInfo.length && '登录'}</Avatar>
+            icon={userInfo.length && <UserOutlined />}
+          >{!userInfo.length && '登录'}
+          </Avatar>
+          <form ref={forms}>
+            <input ref={file} hidden type="file" onChange={fileUpata} id='file' name='image' />
+          </form>
           <div onClick={usernameHandle} className={Stylecss.name}>{!userInfo.length ? '虚无' : userInfo[0].username}</div>
         </div>
         <br />
@@ -308,7 +348,8 @@ const Madman = () => {
               maxWidth: 600,
             }}
             initialValues={{
-              username: userInfo[0]?.username
+              username: userInfo[0]?.username,
+              posts: userInfo[0]?.id
             }}
             autoComplete="off"
           >
@@ -342,6 +383,12 @@ const Madman = () => {
               name="username"
             >
               <Input />
+            </Form.Item>}
+            {usernameFlag && <Form.Item
+              label='职位'
+              name='posts'
+            >
+              <Select labelInValue fieldNames={{ label: 'name', value: 'id' }} options={postsData} />
             </Form.Item>}
             {
               usernameFlag && <Button

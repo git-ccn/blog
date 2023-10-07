@@ -10,7 +10,7 @@ const requset = Axioswrap({
       message.info('请先登录')
       setTimeout(() => {
         User.removeLocal()
-        location.reload()
+        // location.reload()
       }, 1000);
     }
   },
